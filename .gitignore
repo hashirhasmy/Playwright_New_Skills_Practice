@@ -1,0 +1,20 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/.auth/
+
+# Claude Code - Personal settings
+.claude/settings.local.json
+.claude/plans/
+
+# MCP outputs
+.playwright-mcp/
+
+# OS files
+.DS_Store
+Thumbs.db

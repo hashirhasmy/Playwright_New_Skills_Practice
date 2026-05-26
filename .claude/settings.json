@@ -1,0 +1,38 @@
+{
+  "description": "Project-specific settings for Playwright R&D automation project",
+  "version": "1.0.0",
+  "commandTimeout": 30000,
+  "preferences": {
+    "codeStyle": "concise",
+    "explainCode": true,
+    "suggestOptimizations": true
+  },
+  "playwright": {
+    "browserType": "chromium",
+    "headless": true,
+    "slowMo": 0,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "testing": {
+    "defaultTimeout": 30000,
+    "retries": 0,
+    "workers": 4,
+    "fullyParallel": true
+  },
+  "hooks": {},
+  "permissions": {
+    "allow": [],
+    "deny": [],
+    "ask": []
+  },
+  "customPaths": {
+    "tests": "./tests",
+    "fixtures": "./tests/fixtures",
+    "pages": "./tests/pages",
+    "helpers": "./tests/helpers",
+    "data": "./tests/data"
+  }
+}
