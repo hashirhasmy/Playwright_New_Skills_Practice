@@ -64,7 +64,7 @@ D:\My_Use_Hashir\Playwright_New_Skills_Practice\
 │   │   └── checkout-complete.page.js
 │   ├── fixtures\                     # Test fixtures
 │   │   ├── auth.fixture.js           # Authentication state fixture
-│   │   └── global-setup.js           # Generate auth state before tests
+│   │   └── auth-setup.js             # Generate auth state before tests
 │   ├── helpers\                      # Utility functions
 │   │   ├── test-data.helper.js       # Generate test data
 │   │   └── navigation.helper.js      # Navigation utilities
