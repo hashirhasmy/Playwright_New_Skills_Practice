@@ -1,0 +1,88 @@
+name: Playwright Tests (Manual)
+on:
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Browser to test'
+        required: true
+        type: choice
+        default: 'chromium'
+        options:
+          - chromium
+          - firefox
+          - webkit
+          - all
+      test_path:
+        description: 'Test path or pattern (e.g., tests/login/ or specific file, leave empty for all tests)'
+        required: false
+        type: string
+        default: ''
+      headed:
+        description: 'Run tests in headed mode (visible browser)'
+        required: false
+        type: boolean
+        default: false
+      workers:
+        description: 'Number of parallel workers'
+        required: false
+        type: choice
+        default: '1'
+        options:
+          - '1'
+          - '2'
+          - '4'
+          - '8'
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright Browsers
+      run: |
+        if [ "${{ inputs.browser }}" == "all" ]; then
+          npx playwright install --with-deps
+        else
+          npx playwright install --with-deps ${{ inputs.browser }}
+        fi
+
+    - name: Run Playwright tests
+      run: |
+        PROJECT_FLAG=""
+        if [ "${{ inputs.browser }}" != "all" ]; then
+          PROJECT_FLAG="--project=${{ inputs.browser }}"
+        fi
+
+        HEADED_FLAG=""
+        if [ "${{ inputs.headed }}" == "true" ]; then
+          HEADED_FLAG="--headed"
+        fi
+
+        TEST_PATH="${{ inputs.test_path }}"
+
+        npx playwright test $PROJECT_FLAG $HEADED_FLAG --workers=${{ inputs.workers }} $TEST_PATH
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report-${{ inputs.browser }}-${{ github.run_number }}
+        path: playwright-report/
+        retention-days: 30
+
+    - name: Upload test artifacts (screenshots, videos, traces)
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: test-artifacts-${{ inputs.browser }}-${{ github.run_number }}
+        path: test-results/
+        retention-days: 7
